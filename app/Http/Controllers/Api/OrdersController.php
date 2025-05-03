@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class OrdersController extends Controller
 {
-    
+
     protected $orderRepo;
 
     /**
@@ -41,6 +41,33 @@ class OrdersController extends Controller
 
 
     /**
+     * Get orders by status
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getOrderByStatus(Request $request)
+    {
+        $status = $request->query('status');
+
+        if (! $status) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Status parameter is required',
+            ], 422);
+        }
+
+        $orders = $this->orderRepo->filterByStatus($status);
+
+        return response()->json([
+            'payload' => $orders,
+            'success' => true,
+            'message' => "Orders with status '$status' retrieved successfully",
+        ], 200);
+    }
+
+
+    /**
      * Get a specific order
      * 
      * @param int $id
@@ -62,7 +89,6 @@ class OrdersController extends Controller
             'success' => true,
             'message' => "successfully retrieved",
         ], 200);
-        
     }
 
     /**

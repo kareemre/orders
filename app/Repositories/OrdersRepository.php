@@ -22,7 +22,12 @@ Class OrdersRepository extends RepositoryManager
      */
     const TABLE = 'orders';
 
-
+    /**
+     * List of orders stats
+     * 
+     * @param  array options
+     * @return \Illuminate\Support\Collection
+     */
     public function orderStats()
     {
         $stats = DB::table(static::TABLE)
@@ -31,5 +36,17 @@ Class OrdersRepository extends RepositoryManager
             ->get();
 
         return $stats;
+    }
+
+
+    /**
+     * filter orders by status
+     * 
+     * @param  array options
+     * @return \Illuminate\Support\Collection
+     */
+    public function filterByStatus(string $status)
+    {
+        return static::MODEL::where('status', $status)->get();
     }
 }
